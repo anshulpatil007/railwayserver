@@ -12,11 +12,12 @@ app.use(bodyParser.json());
 
 // MySQL connection setup
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'anshul',
-    password: 'Sushama22@1234',
-    database: 'ShoppingCartDB'
+    host: process.env.DATABASE_HOST || 'localhost',
+    user: process.env.DATABASE_USER || 'anshul',
+    password: process.env.DATABASE_PASSWORD || 'Sushama22@1234',
+    database: process.env.DATABASE_NAME || 'ShoppingCartDB'
 });
+
 
 // Connect to MySQL
 connection.connect(err => {
