@@ -11,22 +11,18 @@ const PORT = 3000;
 app.use(bodyParser.json());
 
 // MySQL connection setup
-const connection = mysql.createConnection({
-    host: process.env.DATABASE_HOST || 'localhost',
-    user: process.env.DATABASE_USER || 'anshul',
-    password: process.env.DATABASE_PASSWORD || 'Sushama22@1234',
-    database: process.env.DATABASE_NAME || 'ShoppingCartDB'
-});
+const connection = mysql.createConnection("mysql://root:cEpcKJsCDGwgTZXMHpmtooEbjDDUWVkz@junction.proxy.rlwy.net:25584/railway");
 
 
 // Connect to MySQL
-connection.connect(err => {
+
+connection.connect((err) => {
     if (err) {
-        console.error('Error connecting to MySQL:', err.stack);
-        return;
+      console.error('Database connection failed:', err.stack);
+      return;
     }
-    console.log('Connected to MySQL');
-});
+    console.log('Connected to the database.');
+  });
 
 // Create necessary tables if they don't exist
 connection.query(`
