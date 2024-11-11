@@ -11,7 +11,8 @@ const PORT = 3000;
 app.use(bodyParser.json());
 
 // MySQL connection setup
-const connection = mysql.createConnection("mysql://root:cEpcKJsCDGwgTZXMHpmtooEbjDDUWVkz@junction.proxy.rlwy.net:25584/railway");
+const connection = mysql.createConnection(process.env.MYSQL_URL);
+
 
 
 // Connect to MySQL
@@ -72,7 +73,9 @@ connection.query(`
   
   // Add these new endpoints
   const { v4: uuidv4 } = require('uuid');
-  
+  app.get('/', (req, res) => {
+    res.json({ message: 'Welcome to the shopping cart API!' });
+  });
   // Create a shared cart
   app.post('/share-cart/:userId', async (req, res) => {
     const { userId } = req.params;
