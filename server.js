@@ -168,6 +168,33 @@ connection.query(`
       res.status(500).json({ error: 'Failed to fetch shared cart' });
     }
   });
+  app.post('/add-multiple-to-cart', (req, res) => {
+    const { items, userId } = req.body;
+  
+    if (!Array.isArray(items) || items.length === 0 || !userId) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+  
+    const insertValues = items.map(({ title, price, imageUrl, websiteName, url }) => [
+      userId,
+      title,
+      price,
+      imageUrl,
+      websiteName,
+      url,
+    ]);
+  
+    connection.query(
+      'INSERT INTO cart (user_id, title, price, imageUrl, websiteName, url) VALUES ?',
+      [insertValues],
+      (err, result) => {
+        if (err) {
+          return res.status(500).json({ error: 'Failed to add products to cart' });
+        }
+        res.json({ success: true });
+      }
+    );
+  });
 // User registration
 app.post('/register', (req, res) => {
     const { username, password, email } = req.body;
