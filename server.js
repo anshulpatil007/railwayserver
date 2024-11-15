@@ -76,6 +76,39 @@ connection.query(`
   app.get('/', (req, res) => {
     res.json({ message: 'Welcome to the shopping cart API!' });
   });
+  // Get user information
+  app.get('/user/:userId', (req, res) => {
+    const { userId } = req.params;
+    connection.query(
+      'SELECT username, password, email FROM users WHERE id = ?',
+      [userId],
+      (err, results) => {
+        if (err) {
+          return res.status(500).json({ error: 'Failed to fetch user information' });
+        }
+        if (results.length === 0) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+        res.json(results[0]);
+      }
+    );
+  });
+  app.put('/user/:userId', (req, res) => {
+    const { userId } = req.params;
+    const { username, password, email } = req.body;
+  
+    connection.query(
+      'UPDATE users SET username = ?, password = ?, email = ? WHERE id = ?',
+      [username, password, email, userId],
+      (err, results) => {
+        if (err) {
+          return res.status(500).json({ error: 'Failed to update user information' });
+        }
+        res.json({ message: 'Profile updated successfully' });
+      }
+    );
+  });
+  
   // Create a shared cart
   app.post('/share-cart/:userId', async (req, res) => {
     const { userId } = req.params;
